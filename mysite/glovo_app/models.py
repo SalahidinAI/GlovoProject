@@ -77,8 +77,8 @@ class Combo(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    class Meta:
-        unique_together = ('store', 'combo_name')
+    # class Meta:
+    #     unique_together = ('store', 'combo_name')
 
     def __str__(self):
         return f'{self.combo_name}'
