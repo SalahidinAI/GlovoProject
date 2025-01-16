@@ -64,7 +64,13 @@ class CartAdmin(admin.ModelAdmin):
     inlines = [CartProductInline, CartComboInline]
 
 
+@admin.register(Category)
+class CategoryAdmin(TranslationAdmin, GeneralMedia):
+    pass
+
+
 admin.site.register(User)
+# admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Order)
 admin.site.register(Courier)

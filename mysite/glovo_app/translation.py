@@ -7,6 +7,11 @@ class StoreTranslationOptions(TranslationOptions):
     fields = ('store_name', 'description')
 
 
+@register(Category)
+class CategoryTranslationOptions(TranslationOptions):
+    fields = ('category_name',)
+
+
 @register(StoreAddress)
 class StoreAddressTranslationOptions(TranslationOptions):
     fields = ('address',)

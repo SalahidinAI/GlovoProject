@@ -22,7 +22,15 @@ class User(AbstractUser):
         return f'{self.first_name}, {self.last_name}'
 
 
+class Category(models.Model):
+    category_name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        return self.category_name
+
+
 class Store(models.Model):
+    category = models.ManyToManyField(Category)
     store_image = models.ImageField(upload_to='store_image')
     store_name = models.CharField(max_length=60, unique=True)
     description = models.TextField()
