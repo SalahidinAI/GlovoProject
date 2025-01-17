@@ -46,6 +46,12 @@ class StoreListSerializer(serializers.ModelSerializer):
         return obj.get_good_star()
 
 
+class StoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Store
+        fields = '__all__'
+
+
 class StoreContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreContact
@@ -64,17 +70,28 @@ class StoreAddressSerializer(serializers.ModelSerializer):
         fields = ['address']
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_image', 'description', 'price']
 
 
-class ComboSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
 
+
+class ComboListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Combo
         fields = ['id', 'combo_name', 'combo_image', 'description', 'price']
+
+
+class ComboSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Combo
+        fields = '__all__'
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -116,6 +133,12 @@ class StoreReviewSerializer(serializers.ModelSerializer):
         fields = ['client', 'comment', 'star', 'created_date']
 
 
+class StoreReviewCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoreReview
+        fields = '__all__'
+
+
 class CourierRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourierRating
@@ -137,8 +160,8 @@ class StoreDetailSerializer(serializers.ModelSerializer):
     store_address = StoreAddressSerializer(many=True, read_only=True)
     store_contact = StoreContactSerializer(many=True, read_only=True)
     store_website = StoreWebsiteSerializer(many=True, read_only=True)
-    store_product = ProductSerializer(many=True, read_only=True)
-    store_combo = ComboSerializer(many=True, read_only=True)
+    store_product = ProductListSerializer(many=True, read_only=True)
+    store_combo = ComboListSerializer(many=True, read_only=True)
     store_review = StoreReviewSerializer(many=True, read_only=True)
 
     class Meta:

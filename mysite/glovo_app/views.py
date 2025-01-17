@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 from .models import *
 from .serializers import *
+from .permissions import *
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -32,14 +33,64 @@ class StoreDetailAPIView(generics.RetrieveAPIView):
     serializer_class = StoreDetailSerializer
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class StoreCreateAPIView(generics.CreateAPIView):
+    serializer_class = StoreSerializer
+    permission_classes = [CheckOwner]
+
+
+class StoreOwnerListAPIVeiw(generics.ListAPIView):
+    queryset = Store.objects.all()
+    serializer_class = StoreListSerializer
+    permission_classes = [CheckOwner]
+
+    def get_queryset(self):
+        return Store.objects.filter(owner=self.request.user)
+
+
+class StoreOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    permission_classes = [CheckOwnerStoreEdit, CheckOwner]
+
+
+class ProductCreateAPIView(generics.CreateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [CheckOwner]
+
+
+class ProductOwnerListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
+    permission_classes = [CheckOwner]
+
+    def get_queryset(self):
+        return Product.objects.filter(store__owner=self.request.user)
+
+
+class ProductOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [CheckOwnerProductEdit, CheckOwner]
 
 
-class ComboViewSet(viewsets.ModelViewSet):
+class ComboCreateAPIView(generics.CreateAPIView):
+    serializer_class = ComboSerializer
+    permission_classes = [CheckOwner]
+
+
+class ComboOwnerListAPIView(generics.ListAPIView):
+    queryset = Combo.objects.all()
+    serializer_class = ComboListSerializer
+    permission_classes = [CheckOwner]
+
+    def get_queryset(self):
+        return Combo.objects.filter(store__owner=self.request.user)
+
+
+class ComboOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Combo.objects.all()
     serializer_class = ComboSerializer
+    permission_classes = [CheckOwnerProductEdit, CheckOwner]
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -67,11 +118,11 @@ class CourierViewSet(viewsets.ModelViewSet):
     serializer_class = CourierSerializer
 
 
-class StoreReviewViewSet(viewsets.ModelViewSet):
-    queryset = StoreReview.objects.all()
-    serializer_class = StoreReviewSerializer
+class StoreReviewAPIView(generics.CreateAPIView):
+    serializer_class = StoreReviewCreateSerializer
+    permission_classes = [CheckClient]
 
 
-class CourierRatingViewSet(viewsets.ModelViewSet):
-    queryset = CourierRating.objects.all()
+class CourierRatingAPIView(generics.CreateAPIView):
     serializer_class = CourierRatingSerializer
+    permission_classes = [CheckClient]
