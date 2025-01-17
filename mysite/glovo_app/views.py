@@ -41,7 +41,7 @@ class StoreCreateAPIView(generics.CreateAPIView):
     serializers_class = StoreSerializer
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -49,9 +49,26 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['product_name']
 
 
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
-class ComboViewSet(viewsets.ModelViewSet):
+
+class ProductCreateAPIView(generics.CreateAPIView):
+    serializer_class = ProductSerializer
+
+
+class ComboListAPIView(generics.ListAPIView):
     queryset = Combo.objects.all()
+    serializer_class = ComboListSerializer
+
+
+class ComboDetailAPIView(generics.RetrieveAPIView):
+    queryset = Combo.objects.all()
+    serializer_class = ComboDetailSerializer
+
+
+class ComboCreateAPIView(generics.CreateAPIView):
     serializer_class = ComboSerializer
 
 

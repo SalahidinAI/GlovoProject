@@ -68,17 +68,43 @@ class StoreAddressSerializer(serializers.ModelSerializer):
         fields = ['address']
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'product_name', 'product_image']
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_image', 'description', 'price']
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ComboListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Combo
+        fields = ['id', 'combo_name', 'combo_image']
+
+
+class ComboDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Combo
+        fields = ['id', 'combo_name', 'combo_image', 'description', 'price']
 
 
 class ComboSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Combo
-        fields = ['id', 'combo_name', 'combo_image', 'description', 'price']
+        fields = '__all__'
 
 
 class CartSerializer(serializers.ModelSerializer):

@@ -5,7 +5,6 @@ from .views import *
 
 router = routers.SimpleRouter()
 router.register(r'user', UserViewSet, basename='user_list')
-router.register(r'product', ProductViewSet, basename='_list')
 
 
 urlpatterns = [
@@ -15,6 +14,12 @@ urlpatterns = [
     path('store/', StoreListAPIView.as_view(), name='store_list'),
     path('store/<int:pk>/', StoreDetailAPIView.as_view(), name='store_detail'),
     path('store/create/', StoreCreateAPIView.as_view(), name = 'store_create'),
-    path('review/', StoreReviewViewSet.as_view({'get': 'list'}), name = 'review'),
+    path('product/', ProductListAPIView.as_view(), name='product_list'),
+    path('product/<int:pk>/', ProductDetailAPIView.as_view(), name='product_detail'),
+    path('product/create/', ProductCreateAPIView.as_view(), name = 'product_create'),
+    path('combo/', ComboListAPIView.as_view(), name='combo_list'),
+    path('combo/<int:pk>/', ComboDetailAPIView.as_view(), name='combo_detail'),
+    path('combo/create/', ComboCreateAPIView.as_view(), name = 'combo_create'),
+    path('review/', StoreReviewViewSet.as_view(), name = 'review'),
     path('courier_rating/', CourierRatingViewSet.as_view({'get': 'list'}), name = 'courier_rating')
 ]
