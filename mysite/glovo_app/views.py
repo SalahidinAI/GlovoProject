@@ -42,7 +42,7 @@ class StoreCreateAPIView(generics.CreateAPIView):
     permission_classes = [CheckOwner]
 
 
-class StoreOwnerListAPIVeiw(generics.ListAPIView):
+class StoreOwnerListAPIView(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreListSerializer
     permission_classes = [CheckOwner]

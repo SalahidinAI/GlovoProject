@@ -69,14 +69,8 @@ class StoreAddressSerializer(serializers.ModelSerializer):
         model = StoreAddress
         fields = ['address']
 
-#  detail and list are different and it is ok, check are u using both of them
+
 class ProductListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'product_name', 'product_image']
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_image', 'description', 'price']
@@ -89,13 +83,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ComboListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Combo
-        fields = ['id', 'combo_name', 'combo_image']
-
-
-class ComboDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Combo
         fields = ['id', 'combo_name', 'combo_image', 'description', 'price']
@@ -166,7 +153,6 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
         fields = ['category_name', 'category_store']
 
 
-# I'm fulling this class with combo, products ...
 class StoreDetailSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer()
     category = CategoryListSerializer(many=True, read_only=True)
