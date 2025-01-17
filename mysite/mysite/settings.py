@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'glovo_app',
     "phonenumber_field",
     'multiselectfield',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

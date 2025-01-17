@@ -2,6 +2,9 @@ from rest_framework import viewsets, generics
 from .models import *
 from .serializers import *
 from .permissions import *
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import ProductFilter
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -25,9 +28,10 @@ class CategoryDetailAPIView(generics.RetrieveAPIView):
 class StoreListAPIView(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreListSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['store_name']
 
 
-# proses
 class StoreDetailAPIView(generics.RetrieveAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreDetailSerializer
@@ -61,6 +65,9 @@ class ProductCreateAPIView(generics.CreateAPIView):
 class ProductOwnerListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ProductFilter
+    search_fields = ['product_name']
     permission_classes = [CheckOwner]
 
     def get_queryset(self):
@@ -90,7 +97,6 @@ class ComboOwnerListAPIView(generics.ListAPIView):
 class ComboOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Combo.objects.all()
     serializer_class = ComboSerializer
-    permission_classes = [CheckOwnerProductEdit, CheckOwner]
 
 
 class CartViewSet(viewsets.ModelViewSet):

@@ -117,7 +117,7 @@ class StoreAddress(models.Model):
 class Product(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product')
     product_name = models.CharField(max_length=60, unique=True)
-    product_image = models.ImageField(upload_to='product_image')
+    product_image = models.ImageField(upload_to='product_image/', null=False, blank=False)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
