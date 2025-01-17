@@ -30,7 +30,7 @@ class Category(models.Model):
 
 
 class Store(models.Model):
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, related_name='category_store')
     store_image = models.ImageField(upload_to='store_image')
     store_name = models.CharField(max_length=60, unique=True)
     description = models.TextField()
@@ -39,9 +39,48 @@ class Store(models.Model):
     def __str__(self):
         return f'{self.store_name}'
 
+    def get_reviews_data(self):
+        all_reviews = self.store_review.all()
+        total_stars = [i.star for i in all_reviews if i.star]
+        return total_stars
+
+    def get_avg_rating(self):
+        total_stars = self.get_reviews_data()
+        if total_stars:
+            return round(sum(total_stars) / len(total_stars), 1)
+        return 0
+
+    def get_count_rating(self):
+        total_stars = self.get_reviews_data()
+        count_stars = len(total_stars)
+        count_rating = count_stars if count_stars < 3 else '3+'
+        if count_rating:
+            return count_rating
+        return 0
+
+    def get_good_star(self):
+        total_stars = self.get_reviews_data()
+        good_stars = [i for i in total_stars if i >=4]
+        if total_stars:
+            percent = round(100 / len(total_stars) * len(good_stars), 1)
+            return f'{percent}%'
+        return '0%'
+
+    # def get_avg_rating(self):
+    #     reviews = self.store_review.all()
+    #     total_stars = [i.star for i in reviews if i.star]
+    #     avg_star = round(sum(total_stars) / len(total_stars), 1)
+    #     good_star = round(100 / len(total_stars) * len([i for i in total_stars if i >=4]), 1)
+    #     count_rating = len(total_stars) if len(total_stars) < 3 else '3+'
+    #     if reviews.exists():
+    #         return avg_star, count_rating, f'{good_star}%'
+    #     return 0
+
+
 
 class StoreContact(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_contact')
+    title = models.CharField(max_length=32, null=True, blank=True)
     contact = PhoneNumberField()
 
     class Meta:
@@ -52,7 +91,15 @@ class StoreContact(models.Model):
 
 
 class StoreWebsite(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_website')
+    WEBSITE_CHOICES = (
+        ('Instagram', 'Instagram'),
+        ('Telegram', 'Telegram'),
+        ('Linkedin', 'Linkedin'),
+        ('Facebook', 'Facebook'),
+        ('Twitter', 'Twitter'),
+    )
+    website_name = models.CharField(choices=WEBSITE_CHOICES, max_length=32)
     website = models.URLField()
 
     def __str__(self):
@@ -60,7 +107,7 @@ class StoreWebsite(models.Model):
 
 
 class StoreAddress(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_address')
     address = models.CharField(max_length=128)
 
     def __str__(self):
@@ -68,36 +115,25 @@ class StoreAddress(models.Model):
 
 
 class Product(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product')
     product_name = models.CharField(max_length=60, unique=True)
+    product_image = models.ImageField(upload_to='product_image')
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    # quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.product_name}, {self.price}'
 
 
 class Combo(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    combo_image = models.ImageField(upload_to='combo_image')
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_combo')
     combo_name = models.CharField(max_length=64)
+    combo_image = models.ImageField(upload_to='combo_image')
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # class Meta:
-    #     unique_together = ('store', 'combo_name')
-
     def __str__(self):
         return f'{self.combo_name}'
-
-
-class ComboProduct(models.Model):
-    combo = models.ForeignKey(Combo, on_delete=models.CASCADE)
-    product_name = models.CharField(max_length=32)
-
-    def __str__(self):
-        return f'{self.product_name}'
 
 
 class Cart(models.Model):
@@ -161,9 +197,10 @@ class Courier(models.Model):
 
 class StoreReview(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    comment = models.TextField()
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_review')
+    star = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)], null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return f'{self.client} {self.store}'

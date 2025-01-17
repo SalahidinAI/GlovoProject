@@ -5,20 +5,13 @@ from .views import *
 
 router = routers.SimpleRouter()
 router.register(r'user', UserViewSet, basename='user_list')
-router.register(r'category', CategoryViewSet, basename='category_list')
-router.register(r'store', StoreViewSet, basename='store_list')
 router.register(r'product', ProductViewSet, basename='_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
-# router.register(r'store', StoreViewSet, basename='store_list')
+
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('category/', CategoryListAPIView.as_view(), name='category_list'),
+    path('category/<int:pk>/', CategoryDetailAPIView.as_view(), name='category_detail'),
+    path('store/', StoreListAPIView.as_view(), name='store_list'),
+    path('store/<int:pk>/', StoreDetailAPIView.as_view(), name='store_detail'),
 ]

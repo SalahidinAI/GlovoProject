@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from .models import *
 from .serializers import *
 
@@ -7,15 +7,29 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
 
-class CategoryViewSet(viewsets.ModelViewSet):
+
+class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryListSerializer
 
 
-class StoreViewSet(viewsets.ModelViewSet):
+class CategoryDetailAPIView(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryDetailSerializer
+
+
+class StoreListAPIView(generics.ListAPIView):
     queryset = Store.objects.all()
-    serializer_class = StoreSerializer
+    serializer_class = StoreListSerializer
+
+
+# proses
+class StoreDetailAPIView(generics.RetrieveAPIView):
+    queryset = Store.objects.all()
+    serializer_class = StoreDetailSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -26,11 +40,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ComboViewSet(viewsets.ModelViewSet):
     queryset = Combo.objects.all()
     serializer_class = ComboSerializer
-
-
-class ComboProductViewSet(viewsets.ModelViewSet):
-    queryset = ComboProduct.objects.all()
-    serializer_class = ComboProductSerializer
 
 
 class CartViewSet(viewsets.ModelViewSet):

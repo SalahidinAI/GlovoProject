@@ -35,14 +35,9 @@ class StoreAdmin(TranslationAdmin, GeneralMedia):
     inlines = [StoreContactInline, StoreWebsiteInline, StoreAddressInline]
 
 
-class ComboProductInline(admin.TabularInline, TranslationInlineModelAdmin):
-    model = ComboProduct
-    extra = 1
-
-
 @admin.register(Combo)
 class ComboAdmin(TranslationAdmin, GeneralMedia):
-    inlines = [ComboProductInline]
+    pass
 
 
 @admin.register(Product)
