@@ -6,6 +6,8 @@ from .views import *
 router = routers.SimpleRouter()
 router.register(r'user', UserViewSet, basename='user_list')
 router.register(r'cart', CartViewSet, basename='cart_list')
+router.register(r'cart_product', CartProductViewSet, basename='cart_product_list')
+router.register(r'cart_combo', CartComboViewSet, basename='cart_combo_product_list')
 
 
 urlpatterns = [
@@ -25,4 +27,5 @@ urlpatterns = [
     path('combo/', ComboOwnerListAPIView.as_view(), name='combo_owner_list'),
     path('combo/<int:pk>/', ComboOwnerEditAPIView.as_view(), name='combo_owner_edit'),
     path('combo/create/', ComboCreateAPIView.as_view(), name='combo_owner_create'),
+    path('order/create/', OrderCreateAPIView.as_view(), name='order_create'),
 ]

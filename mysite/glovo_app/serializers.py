@@ -112,10 +112,17 @@ class CartComboSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+    def validate(self, data):
+        if not data.get('cart_product') and not data.get('cart_combo'):
+            raise serializers.ValidationError({
+                'cart_product': "You must select at least one of 'cart_product' or 'cart_combo'.",
+                'cart_combo': "You must select at least one of 'cart_product' or 'cart_combo'."
+            })
+        return data
 
 
 class CourierSerializer(serializers.ModelSerializer):
@@ -137,6 +144,14 @@ class StoreReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreReview
         fields = '__all__'
+
+    def validate(self, data):
+        if not data.get('comment') and not data.get('star'):
+            raise serializers.ValidationError({
+                'comment': "You have to choose one of these comment or star.",
+                'star': "You have to choose one of these comment or star."
+            })
+        return data
 
 
 class CourierRatingSerializer(serializers.ModelSerializer):

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
@@ -180,6 +181,11 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.client}, {self.cart_product}, {self.cart_combo} {self.status}, {self.courier}'
 
+    def clean(self):
+        super().clean()
+        if not self.cart_product and not self.cart_combo:
+            raise ValidationError("You must select at least one of 'cart_product' or 'cart_combo'.")
+
 
 class Courier(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -203,6 +209,11 @@ class StoreReview(models.Model):
 
     def __str__(self):
         return f'{self.client} {self.store}'
+
+    def clean(self):
+        super().clean()
+        if not self.star and not self.comment:
+            raise ValidationError('You have to choose one of these comment or star')
 
 
 class CourierRating(models.Model):

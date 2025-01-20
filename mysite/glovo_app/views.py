@@ -102,21 +102,34 @@ class ComboOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    permission_classes = [CheckClient]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
 
 
 class CartProductViewSet(viewsets.ModelViewSet):
     queryset = CartProduct.objects.all()
     serializer_class = CartProductSerializer
+    permission_classes = [CheckClient]
+
+    def get_queryset(self):
+        return CartProduct.objects.filter(cart__user=self.request.user)
 
 
 class CartComboViewSet(viewsets.ModelViewSet):
     queryset = CartCombo.objects.all()
     serializer_class = CartComboSerializer
+    permission_classes = [CheckClient]
+
+    def get_queryset(self):
+        return CartCombo.objects.filter(cart__user=self.request.user)
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderCreateAPIView(generics.CreateAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
+    permission_classes = [CheckClient]
 
 
 class CourierViewSet(viewsets.ModelViewSet):
