@@ -129,9 +129,26 @@ class CartComboSimpleSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    user = UserNameSerializer()
+    cart_product = CartProductSimpleSerializer()
+    cart_combo = CartComboSimpleSerializer()
+    courier = UserNameSerializer()
+    created_at = serializers.DateTimeField(format('%d-%m-%Y %H:%M'))
+    products_total_price = serializers.SerializerMethodField()
+
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['id', 'user', 'cart_product', 'cart_combo', 'delivery_address',
+                  'status', 'products_total_price', 'courier', 'created_at']
+
+    def get_products_total_price(self, obj):
+        return obj.get_products_total_price()
+
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['status']
 
 
 class OrderListSerializer(serializers.ModelSerializer):

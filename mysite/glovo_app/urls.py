@@ -8,7 +8,6 @@ router.register(r'user', UserViewSet, basename='user_list')
 router.register(r'cart', CartViewSet, basename='cart_list')
 router.register(r'cart_product', CartProductViewSet, basename='cart_product_list')
 router.register(r'cart_combo', CartComboViewSet, basename='cart_combo_product_list')
-# router.register(r'courier', CourierViewSet, basename='courier_list')
 
 
 urlpatterns = [
@@ -34,4 +33,5 @@ urlpatterns = [
     path('courier/', CourierAPIView.as_view(), name='courier_list'),
     path('courier/<int:pk>/', CourierEditAPIView.as_view(), name='courier_list'),
     path('courier/order/', CourierOrderAPIView.as_view(), name='courier_order_list'),
+    path('courier/order/<int:pk>/', CourierOrderEditAPIView.as_view(), name='courier_order_edit'),
 ]

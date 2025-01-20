@@ -170,6 +170,16 @@ class CourierOrderAPIView(generics.ListAPIView):
         return Order.objects.filter(courier=self.request.user)
 
 
+class CourierOrderEditAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Order.objects.all()
+    permission_classes = [CheckCourier]
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return OrderUpdateSerializer
+        return OrderSerializer
+
+
 class StoreReviewAPIView(generics.CreateAPIView):
     serializer_class = StoreReviewCreateSerializer
     permission_classes = [CheckClient]

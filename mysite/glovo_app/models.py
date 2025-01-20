@@ -186,6 +186,20 @@ class Order(models.Model):
         if not self.cart_product and not self.cart_combo:
             raise ValidationError("You must select at least one of 'cart_product' or 'cart_combo'.")
 
+    def get_products_total_price(self):
+        result = 0
+        if self.cart_product:
+            product_price = self.cart_product.product.price
+            product_quantity = self.cart_product.quantity
+            result += product_price * product_quantity
+        if self.cart_combo:
+            combo_price = self.cart_combo.combo.price
+            combo_quantity = self.cart_combo.quantity
+            result += combo_price * combo_quantity
+        if result:
+            return result
+        return 0
+
 
 class Courier(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
