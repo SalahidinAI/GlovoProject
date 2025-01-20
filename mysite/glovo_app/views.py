@@ -132,7 +132,7 @@ class OrderListAPIView(generics.ListAPIView):
     permission_classes = [CheckClient]
 
     def get_queryset(self):
-        return Order.objects.filter(owner=self.request.user)
+        return Order.objects.filter(user=self.request.user)
 
 
 class OrderCreateAPIView(generics.CreateAPIView):
@@ -143,12 +143,31 @@ class OrderCreateAPIView(generics.CreateAPIView):
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [CheckOwnerEdit]
+    permission_classes = [CheckUser]
 
 
-class CourierViewSet(viewsets.ModelViewSet):
+class CourierAPIView(generics.ListAPIView):
     queryset = Courier.objects.all()
     serializer_class = CourierSerializer
+    permission_classes = [CheckCourier]
+
+    def get_queryset(self):
+        return Courier.objects.filter(user=self.request.user)
+
+
+class CourierEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Courier.objects.all()
+    serializer_class = CourierSerializer
+    permission_classes = [CheckUser, CheckCourier]
+
+
+class CourierOrderAPIView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [CheckCourier]
+
+    def get_queryset(self):
+        return Order.objects.filter(courier=self.request.user)
 
 
 class StoreReviewAPIView(generics.CreateAPIView):

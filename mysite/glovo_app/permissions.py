@@ -11,6 +11,11 @@ class CheckOwner(permissions.BasePermission):
         return request.user.role == 'owner'
 
 
+class CheckCourier(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role == 'courier'
+
+
 class CheckOwnerEdit(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.owner
@@ -19,3 +24,8 @@ class CheckOwnerEdit(permissions.BasePermission):
 class CheckOwnerProductEdit(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.store.owner
+
+
+class CheckUser(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.user

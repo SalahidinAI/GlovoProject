@@ -135,7 +135,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    owner = UserNameSerializer()
+    user = UserNameSerializer()
     courier = UserNameSerializer()
     cart_product = CartProductSimpleSerializer()
     cart_combo = CartComboSimpleSerializer()
@@ -143,7 +143,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'owner', 'cart_product', 'cart_combo',
+        fields = ['id', 'user', 'cart_product', 'cart_combo',
                   'delivery_address', 'status', 'courier', 'created_at']
 
     def validate(self, data):
@@ -156,9 +156,11 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 
 class CourierSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Courier
-        fields = '__all__'
+        fields = ['id', 'user', 'status', 'current_orders']
 
 
 class StoreReviewSerializer(serializers.ModelSerializer):
