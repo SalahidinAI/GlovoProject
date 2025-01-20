@@ -164,7 +164,7 @@ class CartCombo(models.Model):
 
 
 class Order(models.Model):
-    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_orders')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_orders')
     cart_product = models.ForeignKey(CartProduct, on_delete=models.CASCADE, null=True, blank=True)
     cart_combo = models.ForeignKey(CartCombo, on_delete=models.CASCADE, null=True, blank=True)
     ORDER_STATUS = (
@@ -179,7 +179,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.client}, {self.cart_product}, {self.cart_combo} {self.status}, {self.courier}'
+        return f'{self.owner}, {self.cart_product}, {self.cart_combo} {self.status}, {self.courier}'
 
     def clean(self):
         super().clean()

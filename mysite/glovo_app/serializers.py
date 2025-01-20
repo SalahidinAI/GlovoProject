@@ -106,16 +106,46 @@ class CartProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CartProductSimpleSerializer(serializers.ModelSerializer):
+    product = ProductListSerializer()
+
+    class Meta:
+        model = CartProduct
+        fields = ['product', 'quantity']
+
+
 class CartComboSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartCombo
         fields = '__all__'
 
 
-class OrderCreateSerializer(serializers.ModelSerializer):
+class CartComboSimpleSerializer(serializers.ModelSerializer):
+    combo = ComboListSerializer()
+
+    class Meta:
+        model = CartCombo
+        fields = ['combo', 'quantity']
+
+
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+
+
+class OrderListSerializer(serializers.ModelSerializer):
+    owner = UserNameSerializer()
+    courier = UserNameSerializer()
+    cart_product = CartProductSimpleSerializer()
+    cart_combo = CartComboSimpleSerializer()
+    created_at = serializers.DateTimeField(format('%d-%m-%Y %H:%M'))
+
+    class Meta:
+        model = Order
+        fields = ['id', 'owner', 'cart_product', 'cart_combo',
+                  'delivery_address', 'status', 'courier', 'created_at']
+
     def validate(self, data):
         if not data.get('cart_product') and not data.get('cart_combo'):
             raise serializers.ValidationError({

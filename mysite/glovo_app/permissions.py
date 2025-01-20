@@ -11,7 +11,7 @@ class CheckOwner(permissions.BasePermission):
         return request.user.role == 'owner'
 
 
-class CheckOwnerStoreEdit(permissions.BasePermission):
+class CheckOwnerEdit(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.owner
 

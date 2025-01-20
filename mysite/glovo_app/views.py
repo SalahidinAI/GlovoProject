@@ -54,7 +54,7 @@ class StoreOwnerListAPIView(generics.ListAPIView):
 class StoreOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
-    permission_classes = [CheckOwnerStoreEdit, CheckOwner]
+    permission_classes = [CheckOwnerEdit, CheckOwner]
 
 
 class ProductCreateAPIView(generics.CreateAPIView):
@@ -126,10 +126,24 @@ class CartComboViewSet(viewsets.ModelViewSet):
         return CartCombo.objects.filter(cart__user=self.request.user)
 
 
-class OrderCreateAPIView(generics.CreateAPIView):
+class OrderListAPIView(generics.ListAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderCreateSerializer
+    serializer_class = OrderListSerializer
     permission_classes = [CheckClient]
+
+    def get_queryset(self):
+        return Order.objects.filter(owner=self.request.user)
+
+
+class OrderCreateAPIView(generics.CreateAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [CheckClient]
+
+
+class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [CheckOwnerEdit]
 
 
 class CourierViewSet(viewsets.ModelViewSet):

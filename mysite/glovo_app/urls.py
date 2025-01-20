@@ -28,4 +28,6 @@ urlpatterns = [
     path('combo/<int:pk>/', ComboOwnerEditAPIView.as_view(), name='combo_owner_edit'),
     path('combo/create/', ComboCreateAPIView.as_view(), name='combo_owner_create'),
     path('order/create/', OrderCreateAPIView.as_view(), name='order_create'),
+    path('order/', OrderListAPIView.as_view(), name='order_list'),
+    path('order/<int:pk>/', OrderDetailAPIView.as_view(), name='order_detail'),
 ]
