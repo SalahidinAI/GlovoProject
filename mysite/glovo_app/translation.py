@@ -1,4 +1,4 @@
-from .models import *
+from .models import Store, Category, StoreAddress, Combo, Product
 from modeltranslation.translator import TranslationOptions,register
 
 

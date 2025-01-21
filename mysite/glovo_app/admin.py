@@ -1,6 +1,7 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin, TranslationInlineModelAdmin
-from .models import *
+from .models import (StoreContact, StoreWebsite, StoreAddress, Store, Combo, Product, CourierRating,
+                     CartProduct, CartCombo, Category, User, Cart, Order, Courier, StoreReview)
 
 
 class StoreContactInline(admin.TabularInline):

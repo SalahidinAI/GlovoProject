@@ -1,6 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import *
+from .views import (UserViewSet, CartViewSet, CartProductViewSet, CartComboViewSet, RegisterView, CustomLoginView,
+                    LogoutView, CategoryListAPIView, CategoryDetailAPIView, StoreListAPIView, StoreDetailAPIView,
+                    StoreCreateAPIView, StoreOwnerListAPIView, StoreOwnerEditAPIView, ProductListAPIView, ProductDetailAPIView,
+                    ProductCreateAPIView, ProductOwnerListAPIView, ProductOwnerEditAPIView, ComboListAPIView, ComboDetailAPIView,
+                    ComboCreateAPIView, ComboOwnerListAPIView, ComboOwnerEditAPIView, OrderListAPIView, OrderDetailAPIView,
+                    OrderCreateAPIView, CourierAPIView, CourierEditAPIView, CourierOrderAPIView, CourierOrderEditAPIView,
+                    StoreReviewAPIView, CourierRatingAPIView)
 
 
 router = routers.SimpleRouter()

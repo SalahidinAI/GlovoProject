@@ -1,11 +1,16 @@
 from rest_framework import viewsets, generics, status
-from .models import *
-from .serializers import *
-from .permissions import *
+from urllib3 import request
+
+from .models import (User, Category, Store, Product, Combo, Cart, CartProduct, CartCombo, Order, Courier)
+from .serializers import (RefreshToken, UserSerializer, LoginSerializer, UserProfileSerializer, CategoryListSerializer,
+                          CategoryDetailSerializer, StoreListSerializer, StoreDetailSerializer, StoreSerializer, ProductListSerializer,
+                          ProductSerializer, ComboListSerializer, ComboSerializer, CartSerializer, CartProductSerializer, CartComboSerializer,
+                          OrderListSerializer, OrderSerializer, CourierSerializer, OrderUpdateSerializer, OrderCreateSerializer, StoreReviewCreateSerializer, CourierRatingSerializer)
+from .permissions import CheckClient, CheckOwner, CheckCourier, CheckOwnerEdit, CheckOwnerProductEdit, CheckUser, CheckCourierOrder
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .filters import ProductFilter
-from .paginations import *
+from .paginations import TwoObjectPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -202,14 +207,18 @@ class OrderListAPIView(generics.ListAPIView):
 
 
 class OrderCreateAPIView(generics.CreateAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     permission_classes = [CheckClient]
 
 
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
     permission_classes = [CheckUser]
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return OrderUpdateSerializer
+        return OrderSerializer
 
 
 class CourierAPIView(generics.ListAPIView):
@@ -238,7 +247,7 @@ class CourierOrderAPIView(generics.ListAPIView):
 
 class CourierOrderEditAPIView(generics.RetrieveUpdateAPIView):
     queryset = Order.objects.all()
-    permission_classes = [CheckCourier]
+    permission_classes = [CheckCourier, CheckCourierOrder]
 
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:

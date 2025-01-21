@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import *
+from .models import (User, Category, Store, StoreContact, StoreWebsite, StoreAddress, Product,
+                     Combo, Cart, CartProduct, CartCombo, Order, Courier, CourierRating, StoreReview)
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
@@ -187,6 +188,12 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['status']
+
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 
 class OrderListSerializer(serializers.ModelSerializer):

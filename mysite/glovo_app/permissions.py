@@ -29,3 +29,8 @@ class CheckOwnerProductEdit(permissions.BasePermission):
 class CheckUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.user
+
+
+class CheckCourierOrder(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.courier
