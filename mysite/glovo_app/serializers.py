@@ -1,8 +1,45 @@
 from rest_framework import serializers
 from .models import *
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'user_image', 'first_name', 'last_name',
+                  'age','email', 'phone_number', 'password', 'role', 'data_register')
+        extra_kwargs = {'password': {'write_only': True}}
+
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+    def to_representation(self, instance):
+        refresh = RefreshToken.for_user(instance)
+        return {
+            'user': {
+                'username': instance.username,
+                'email': instance.email,
+            },
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+        }
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Неверные учетные данные")
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'user_image', 'role', 'age', 'email', 'phone_number',
@@ -174,7 +211,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 
 class CourierSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserProfileSerializer()
     avg_rating = serializers.SerializerMethodField()
     count_people = serializers.SerializerMethodField()
 

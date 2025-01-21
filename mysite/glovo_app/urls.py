@@ -11,6 +11,9 @@ router.register(r'cart_combo', CartComboViewSet, basename='cart_combo_product_li
 
 
 urlpatterns = [
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('', include(router.urls)),
     path('category/', CategoryListAPIView.as_view(), name='category_list'),
     path('category/<int:pk>/', CategoryDetailAPIView.as_view(), name='category_detail'),
