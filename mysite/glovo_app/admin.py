@@ -65,7 +65,6 @@ class CategoryAdmin(TranslationAdmin, GeneralMedia):
 
 
 admin.site.register(User)
-# admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Order)
 admin.site.register(Courier)

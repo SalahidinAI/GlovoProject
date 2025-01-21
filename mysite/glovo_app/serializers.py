@@ -5,7 +5,8 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'first_name', 'last_name', 'user_image', 'role', 'age', 'email', 'phone_number',
+                  'password', 'data_register']
 
 
 class UserSimpleSerializer(serializers.ModelSerializer):
@@ -174,10 +175,18 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 class CourierSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    avg_rating = serializers.SerializerMethodField()
+    count_people = serializers.SerializerMethodField()
 
     class Meta:
         model = Courier
-        fields = ['id', 'user', 'status', 'current_orders']
+        fields = ['id', 'user', 'status', 'current_orders', 'avg_rating', 'count_people']
+
+    def get_avg_rating(self, obj):
+        return obj.get_avg_rating()
+
+    def get_count_people(self, obj):
+        return obj.get_count_people()
 
 
 class StoreReviewSerializer(serializers.ModelSerializer):

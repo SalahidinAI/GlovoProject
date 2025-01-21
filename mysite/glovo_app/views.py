@@ -5,6 +5,7 @@ from .permissions import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .filters import ProductFilter
+from .paginations import *
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,6 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
+    pagination_class = TwoObjectPagination
 
 
 class CategoryDetailAPIView(generics.RetrieveAPIView):
@@ -30,6 +32,7 @@ class StoreListAPIView(generics.ListAPIView):
     serializer_class = StoreListSerializer
     filter_backends = [SearchFilter]
     search_fields = ['store_name']
+    pagination_class = TwoObjectPagination
 
 
 class StoreDetailAPIView(generics.RetrieveAPIView):
@@ -46,6 +49,7 @@ class StoreOwnerListAPIView(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreListSerializer
     permission_classes = [CheckOwner]
+    pagination_class = TwoObjectPagination
 
     def get_queryset(self):
         return Store.objects.filter(owner=self.request.user)
@@ -55,6 +59,17 @@ class StoreOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
     permission_classes = [CheckOwnerEdit, CheckOwner]
+
+
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
+    pagination_class = TwoObjectPagination
+
+
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
 class ProductCreateAPIView(generics.CreateAPIView):
@@ -68,7 +83,9 @@ class ProductOwnerListAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
     search_fields = ['product_name']
+    ordering_fields = ['product_name', 'price']
     permission_classes = [CheckOwner]
+    pagination_class = TwoObjectPagination
 
     def get_queryset(self):
         return Product.objects.filter(store__owner=self.request.user)
@@ -78,6 +95,17 @@ class ProductOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [CheckOwnerProductEdit, CheckOwner]
+
+
+class ComboListAPIView(generics.ListAPIView):
+    queryset = Combo.objects.all()
+    serializer_class = ComboListSerializer
+    pagination_class = TwoObjectPagination
+
+
+class ComboDetailAPIView(generics.RetrieveAPIView):
+    queryset = Combo.objects.all()
+    serializer_class = ComboSerializer
 
 
 class ComboCreateAPIView(generics.CreateAPIView):
@@ -97,6 +125,7 @@ class ComboOwnerListAPIView(generics.ListAPIView):
 class ComboOwnerEditAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Combo.objects.all()
     serializer_class = ComboSerializer
+    permission_classes = [CheckOwner, CheckOwnerProductEdit]
 
 
 class CartViewSet(viewsets.ModelViewSet):

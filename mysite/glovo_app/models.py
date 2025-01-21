@@ -66,17 +66,6 @@ class Store(models.Model):
             return f'{percent}%'
         return '0%'
 
-    # def get_avg_rating(self):
-    #     reviews = self.store_review.all()
-    #     total_stars = [i.star for i in reviews if i.star]
-    #     avg_star = round(sum(total_stars) / len(total_stars), 1)
-    #     good_star = round(100 / len(total_stars) * len([i for i in total_stars if i >=4]), 1)
-    #     count_rating = len(total_stars) if len(total_stars) < 3 else '3+'
-    #     if reviews.exists():
-    #         return avg_star, count_rating, f'{good_star}%'
-    #     return 0
-
-
 
 class StoreContact(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_contact')
@@ -213,6 +202,18 @@ class Courier(models.Model):
     def __str__(self):
         return f'{self.user} {self.status}'
 
+    def get_avg_rating(self):
+        ratings = self.courier_rating.all()
+        if ratings.exists():
+            return round(sum([i.rating for i in ratings]) / ratings.count(), 1)
+        return 0
+
+    def get_count_people(self):
+        people = self.courier_rating.all()
+        if people.count() > 3:
+            return '3+'
+        return people.count()
+
 
 class StoreReview(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -232,7 +233,7 @@ class StoreReview(models.Model):
 
 class CourierRating(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
-    courier = models.ForeignKey(Courier, on_delete=models.CASCADE)
+    courier = models.ForeignKey(Courier, on_delete=models.CASCADE, related_name='courier_rating')
     rating = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)])
 
     def __str__(self):
