@@ -1,6 +1,4 @@
 from rest_framework import viewsets, generics, status
-from urllib3 import request
-
 from .models import (User, Category, Store, Product, Combo, Cart, CartProduct, CartCombo, Order, Courier)
 from .serializers import (RefreshToken, UserSerializer, LoginSerializer, UserProfileSerializer, CategoryListSerializer,
                           CategoryDetailSerializer, StoreListSerializer, StoreDetailSerializer, StoreSerializer, ProductListSerializer,
