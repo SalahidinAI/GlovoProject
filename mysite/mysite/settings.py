@@ -135,7 +135,7 @@ USE_L1ON = True
 
 LANGUAGES = (
     ('en', 'English'),
-    ('ru', 'Russia'),
+    ('ru', 'Russian'),
     ('de', 'German'),
 )
 
